@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Test</title>
+  </head>
+
+  <body>
+    <script type="text/javascript">
+      // Create the canvas
+      // ===========================================================
+      var layer = document.createElement("canvas"),
+          ctx = layer.getContext("2d"),
+          canvasWidth, canvasHeight, canvasWidthHalf, canvasHeightHalf,
+          mouse = {x: 0, y: 0, xLast: 0, yLast: 0, isDown: false};
+
+      layer.className = "layer";
+
+      (function setCanvas() {
+        canvasWidth = (window.innerWidth && document.documentElement.clientWidth ?
+                          Math.min(window.innerWidth, document.documentElement.clientWidth) :
+                          window.innerWidth ||
+                          document.documentElement.clientWidth ||
+                          document.getElementsByTagName('body')[0].clientWidth);
+        canvasHeight = (window.innerHeight && document.documentElement.clientHeight ?
+                          Math.min(window.innerHeight, document.documentElement.clientHeight) :
+                          window.innerHeight ||
+                          document.documentElement.clientHeight ||
+                          document.getElementsByTagName('body')[0].clientHeight);
+
+        canvasWidthHalf = Math.floor(canvasWidth * 0.5);
+        canvasHeightHalf = Math.floor(canvasHeight * 0.5);
+
+        layer.width = canvasWidth;
+        layer.height = canvasHeight;
+        document.body.appendChild(layer);
+        window.addEventListener("resize", setCanvas, false);
+      })();
+
+      function bezierFromPointToPoint
+        (
+          x1, y1, // staring point coordinates
+          x2, y2, // ending point cooridantes
+          xB, yB  // bezier mod - by how much line will be bend
+        )
+      {
+        var x, y;
+
+        ctx.moveTo(x1, y1);
+
+        for(t=0; t <= 1; t += 0.01)
+        {
+          x = (1 - t) * (1 - t) * x1 + 2 * (1-t) * t * xB + t * t * x2;
+          y = (1 - t) * (1 - t) * y1 + 2 * (1-t) * t * yB + t * t * y2;
+
+          ctx.lineTo(x, y);
+          ctx.stroke();
+        }
+      }
+      bezierFromPointToPoint( 0, 0, 57, 31, 30, 50 );
+      bezierFromPointToPoint( 57, 31, 105, 101, 150, -50 );
+    </script>
+
+  </body>
+</html>
